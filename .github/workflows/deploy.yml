@@ -1,0 +1,59 @@
+name: Botari Monorepo CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  backend:
+    name: Deploy Backend (botari-api)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: botari-api
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run backend tests
+        run: npm test
+
+      - name: Deploy to Render
+        run: |
+          curl -X POST "$RENDER_DEPLOY_HOOK"
+
+  frontend:
+    name: Deploy Frontend (botari-frontend)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: botari-frontend
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run frontend tests
+        run: npm test
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Deploy to Vercel
+        run: npx vercel --prod --token=$VERCEL_TOKEN
