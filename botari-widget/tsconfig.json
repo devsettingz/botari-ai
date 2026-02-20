@@ -16,6 +16,7 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
+    "emitDeclarationOnly": true,
 
     /* Module settings */
     "verbatimModuleSyntax": true,
@@ -27,5 +28,5 @@
     "exactOptionalPropertyTypes": true
   },
   "include": ["src"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
